@@ -2,6 +2,10 @@
   "name": "fastify-hands-on",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "test": "tap",
+    "dev": "nodemon --watch src/ src/server.js"
+  },
   "repository": "https://github.com/hohoonlee/fastify-hands-on.git",
   "author": "siva6 <hohoonlee@gmail.com>",
   "license": "MIT",
@@ -12,6 +16,7 @@
     "underscore": "^1.13.4"
   },
   "devDependencies": {
+    "nodemon": "^2.0.16",
     "pino-pretty": "^8.0.0",
     "tap": "^16.2.0"
   }
