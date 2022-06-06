@@ -12,7 +12,7 @@ fastify-hands-on
 	- 기본 개발 패키지 추가 (TEST)
 		> yarn add tap pino-pretty nodemon -D
 	- 명령 실행후 dependency
-	```
+	```json
 	"dependencies": {
     	"@fastify/swagger": "^6.1.0",
     	"dayjs": "^1.11.2",
@@ -30,7 +30,7 @@ fastify-hands-on
 	- 작업 디렉토리 생성
 		> mkdir src && mkdir test
 	- src/app.js를 생성한다.
-		```
+		```js
 		const fastify = require('fastify');
 
 		const build = (opts={}) => {
@@ -49,7 +49,7 @@ fastify-hands-on
 		module.exports = build;
 		```
 	- src/server.js를 생성한다.
-		```
+		```js
 		const app = require('./app');
 
 		const server = app({
@@ -74,9 +74,9 @@ fastify-hands-on
 		start();
 		```
 	- package.json에서 start script를 수정한다.
-		```
+		```json
 		"scripts": {
-			"test": "tap",
+			"test": "tap --reporter=list --watch",
 			"dev": "nodemon --watch src/ src/server.js"
 		},
 		```
@@ -84,3 +84,26 @@ fastify-hands-on
 		> yarn dev
 	- 127.0.0.1:3300/hello/world 로 접속해본다.
 		> open http://127.0.0.1:3300/hello/world
+
+1. 테스트 작성
+	- test/app.test.js 작성
+		```js
+		const t = require('tap');
+		const build = require('../src/app');
+
+		t.test('/ test', async t => {
+			const app =  build();
+
+			const response = await app.inject({
+				method: 'GET',
+				url: '/hello/test'
+			});
+
+			t.equal(response.statusCode, 200);
+
+			const body = JSON.parse(response.body);
+			t.same(body.msg, 'Hello,test');
+		});
+		```
+	- test 실행
+		> yarn test

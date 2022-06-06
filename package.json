@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "tap",
+    "test": "tap --reporter=list --watch",
     "dev": "nodemon --watch src/ src/server.js"
   },
   "repository": "https://github.com/hohoonlee/fastify-hands-on.git",
