@@ -2,7 +2,9 @@ fastify-hands-on
 ========================
 1. 사전 설치
 	- nodejs (가능하면 LTS)
+		> node --version
 	- yarn
+		> yarn --version
 
 1. project 초기화
 	- 아래 명령을 수행하면 기본적인 정보로 package.json이 생성됩니다.
@@ -63,7 +65,7 @@ fastify-hands-on
 			try {
 				const port = process.env.PORT || 3300;
 				await fastify.listen(port, '0.0.0.0');
-				fastify?.swagger();
+				fastify.swagger?.();
 				fastify.log.info(`Server Start on ${fastify.server.address().port}`);
 			}catch(e){
 				fastify.log.error(e);
