@@ -52,7 +52,7 @@ fastify-hands-on
 		```js
 		const app = require('./app');
 
-		const server = app({
+		const fastify = app({
 			logger: {
 				level: 'info',
 				prettyPrint: true
@@ -62,11 +62,11 @@ fastify-hands-on
 		const start = async() => {
 			try {
 				const port = process.env.PORT || 3300;
-				await server.listen(port, '0.0.0.0');
-				server.swagger();
-				server.log.info(`Server Start on ${server.server.address().port}`);
+				await fastify.listen(port, '0.0.0.0');
+				fastify?.swagger();
+				fastify.log.info(`Server Start on ${fastify.server.address().port}`);
 			}catch(e){
-				server.log.error(e);
+				fastify.log.error(e);
 				process.exit(1);
 			}
 		};
@@ -107,3 +107,75 @@ fastify-hands-on
 		```
 	- test 실행
 		> yarn test
+
+1. 문서 작성 (swagger)
+	- src/app.js에 swagger 기본 설정 추가
+	```js
+	app.register(require('@fastify/swagger'), {
+		routePrefix: '/documentation',
+		swagger: {
+			info: {
+				title: 'Fastify Hands On'
+		  	},
+		  	host: 'localhost:3300',
+		  	schemes: ['http'],
+		  	consumes: ['application/json'],
+		  	produces: ['application/json']
+		},
+		exposeRoute: true
+	});
+	```
+	- 적용 여부 확인
+	> open localhost:3300/documentation
+	- schema 적용 (src/app.js 수정)
+	```js
+	app.get('/hello/:name', {
+		schema: {
+			description: 'Hellow Test',
+			params: {
+				type: 'object',
+				properties: {
+					name: {
+						type: 'string',
+						description : 'user name'
+					}
+				}
+			}
+		}
+	}, async (req, res) => {
+	```
+	- 재확인
+1. response 추가해 보기
+	- src/app.js schema 수정
+	```js
+	response: {
+		'2xx': {
+			type: 'object',
+			properties: {
+				msg: {type: 'string'}
+			}
+		}
+	}
+	...
+	res.send({ msg: `Hello,${name}`, info:'test version'});
+	```
+
+1. parameter 제한해 보기
+	- src/app.js enum 추가
+	```js
+	name: {
+		type: 'string',
+		enum: ['world', 'siva6'],
+		description : 'user name'
+	}
+	```
+	- curl로 테스트 해보기
+	```
+	curl -X 'GET' \
+	'http://localhost:3300/hello/xworld' \
+	-H 'accept: application/json'
+
+	{"statusCode":400,"error":"Bad Request","message":"params.name should be equal to one of the allowed values"}
+	```
+
+1. test case 수정으로 통과율 변경

@@ -1,6 +1,6 @@
 const app = require('./app');
 
-const server = app({
+const fastify = app({
 	logger: {
 		level: 'info',
 		prettyPrint: true
@@ -10,11 +10,11 @@ const server = app({
 const start = async() => {
 	try {
 		const port = process.env.PORT || 3300;
-		await server.listen(port, '0.0.0.0');
-		server.swagger();
-		server.log.info(`Server Start on ${server.server.address().port}`);
+		await fastify.listen(port, '0.0.0.0');
+		fastify?.swagger();
+		fastify.log.info(`Server Start on ${fastify.server.address().port}`);
 	}catch(e){
-		server.log.error(e);
+		fastify.log.error(e);
 		process.exit(1);
 	}
 };

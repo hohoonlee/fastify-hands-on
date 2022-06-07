@@ -6,11 +6,11 @@ t.test('/ test', async t => {
 
 	const response = await app.inject({
 		method: 'GET',
-		url: '/hello/test'
+		url: '/hello/world'
 	});
 
 	t.equal(response.statusCode, 200);
 
 	const body = JSON.parse(response.body);
-	t.same(body.msg, 'Hello,test');
+	t.same(body.msg, 'Hello,world');
 });
