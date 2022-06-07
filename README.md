@@ -181,3 +181,29 @@ fastify-hands-on
 	```
 
 1. test case 수정으로 통과율 변경
+
+1. docker image 생성
+	- dockerfile 생성
+		```docker
+		FROM node:16
+		WORKDIR /app
+
+		COPY package.json .
+		COPY yarn.lock .
+		COPY src/ ./src/
+
+		RUN yarn install --frozen-lockfile
+		RUN yarn global add pm2
+		RUN pm2 install pm2-logrotate
+
+		ENV NODE_ENV=development
+		ENV PORT=8080
+
+		CMD ["pm2-runtime", "start", "./src/server.js", "-i", "-1"]
+		```
+	- docker build
+		> docker build -t fastify-hands-on .
+	- docker run
+		> docker run --name fastify-hands-on --rm -d -p 3333:8080 fastify-hands-on
+	- open
+		> open http://localhost:3333/documentation
